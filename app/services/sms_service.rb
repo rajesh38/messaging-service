@@ -15,7 +15,7 @@ class SmsService
         return {message: "", error: error_message}, 422
       end
       if message.strip == "STOP"
-        Rails.cache.write("stop-[#{from},#{to}]", true, expires_in: 30.seconds)
+        Rails.cache.write("stop-[#{from},#{to}]", true, expires_in: 4.hours)
       end
       return {message: "inbound sms ok", error: ""}
     rescue Exception => e
