@@ -1,24 +1,45 @@
-# README
+# Messaing System
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This service is responsible for managing SMS sending and receiving
 
-Things you may want to cover:
+# Steps to setup the application:
 
-* Ruby version
+* Install ruby with the command:
+  * rbenv install \<ruby version\>
 
-* System dependencies
+* Install postgres using brew:
+  * brew install postgres
 
-* Configuration
+* Create database in postgres with name: **atc_messaging**
+  
+* Import sql dump into postgres with command:
+  * psql atc_messaging \< \<dump file absulute path\>
 
-* Database creation
+* Install redis
+  * brew install redis
 
-* Database initialization
+* Go to project directory and then use the following command to install all required libraries/plugins:
+  * bundle install
 
-* How to run the test suite
+* Start postgres with the command:
+  * pg_ctl -D /usr/local/var/postgres start
 
-* Services (job queues, cache servers, search engines, etc.)
+* Start redis with command:
+  * redis-server --daemonize yes
 
-* Deployment instructions
+* Start the application with the command:
+  * rails s
 
-* ...
+* Load the following curls in postman to check the APIs
+  * Inbound SMS API CURL:
+    * curl --location --request POST 'localhost:3000/inbound/sms?from=4924195509198&to=441224980094&text=STOP' \
+--header 'username: azr2' \
+--header 'password: 54P2EOKQ47' \
+--header 'Cookie: V_ID=ultimate.2020-05-06.affdcef1aae6cc09dd7582fe9bcef5e2' \
+--data-raw ''
+
+  * Outbound SMS API CURL:
+    * curl --location --request POST 'localhost:3000/outbound/sms?from=4924195509198&to=441224980094&text=STOP' \
+--header 'username: azr1' \
+--header 'password: 20S0KPNOIM' \
+--header 'Cookie: V_ID=ultimate.2020-05-06.affdcef1aae6cc09dd7582fe9bcef5e2'
