@@ -43,3 +43,5 @@ This service is responsible for managing SMS sending and receiving
 --header 'username: azr1' \
 --header 'password: 20S0KPNOIM' \
 --header 'Cookie: V_ID=ultimate.2020-05-06.affdcef1aae6cc09dd7582fe9bcef5e2'
+
+N.B. You can modify the input parameters as per the testcases given in the question statement to check if all the scenarios are covered.
