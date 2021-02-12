@@ -94,11 +94,11 @@ class SmsController < ApplicationController
     if attr_name.in?(method_attr_validations.keys)
       min_length = method_attr_validations[attr_name][:min_length]
       max_length = method_attr_validations[attr_name][:max_length]
-      if min_length && params[:attr_name].length < min_length
+      if min_length && params[attr_name].length < min_length
         error_message = "#{attr_name} is invalid"
         return error_message
       end
-      if max_length && params[:attr_name].length > max_length
+      if max_length && params[attr_name].length > max_length
         error_message = "#{attr_name} is invalid"
         return error_message
       end      
