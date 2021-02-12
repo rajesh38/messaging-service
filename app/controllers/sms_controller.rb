@@ -1,7 +1,7 @@
 class SmsController < ApplicationController
   before_action :validate_http_method, only: [:inbound, :outbound]
   before_action :validate_inbound_params, only: :inbound
-  before_action :validate_outbound_params, only: :inbound
+  before_action :validate_outbound_params, only: :outbound
 
   ATTR_VALIDATIONS = {
     inbound: {
@@ -75,26 +75,25 @@ class SmsController < ApplicationController
   end
 
   def validate_method_params(method_name)
-    required_params = ATTR_VALIDATIONS.keys.select{|k| ATTR_VALIDATIONS[k][:required]}
+    method_attr_validations = ATTR_VALIDATIONS[method_name]
+    required_params = method_attr_validations.keys.select{|k| method_attr_validations[k][:required]}
     error_message = nil
-    required_params.each do |param|
-      if request[param].blank?
-        error_messages = "#{param.to_s} is missing"
-        break
-      end
+    required_params.each do |param_name|
+      return "#{param_name.to_s} is missing" if params[param_name].blank?
     end
-    ATTR_VALIDATIONS.keys.each do |key|
-      error_message = attr_other_validation_error(key)
+    method_attr_validations.keys.each do |key|
+      error_message = attr_other_validation_error(method_name, key)
       return error_message if error_message
     end
     error_message
   end
 
-  def attr_other_validation_error(attr_name)
+  def attr_other_validation_error(method_name, attr_name)
     error_message = nil
-    if attr_name.in?(ATTR_VALIDATIONS.keys)
-      min_length = ATTR_VALIDATIONS[attr_name][:min_length]
-      max_length = ATTR_VALIDATIONS[attr_name][:max_length]
+    method_attr_validations = ATTR_VALIDATIONS[method_name]
+    if attr_name.in?(method_attr_validations.keys)
+      min_length = method_attr_validations[attr_name][:min_length]
+      max_length = method_attr_validations[attr_name][:max_length]
       if min_length && params[:attr_name].length < min_length
         error_message = "#{attr_name} is invalid"
         return error_message
